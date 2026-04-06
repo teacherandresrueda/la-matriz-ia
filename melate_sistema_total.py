@@ -88,26 +88,30 @@ def es_valida(comb):
 # -------------------------
 def generar_numeros():
     historial = leer_historial()
-    frecuencia = analizar_frecuencia(historial)
 
-    intentos = 0
+    # aplana historial
+    flat = [n for jugada in historial for n in jugada] if historial else []
 
-    while True:
-        intentos += 1
+    # frecuencia simple
+    frecuencia = {}
+    for n in flat:
+        frecuencia[n] = frecuencia.get(n, 0) + 1
 
-        # generar candidatos con score
-        candidatos = list(range(1, 57))
-        candidatos.sort(key=lambda x: score_numero(x, frecuencia), reverse=True)
+    # candidatos base
+    candidatos = list(range(1, 57))
 
-        seleccion = sorted(random.sample(candidatos[:30], 6))
+    # ordenar por menor frecuencia (mejor lógica)
+    candidatos.sort(key=lambda x: frecuencia.get(x, 0))
 
-        # evitar repetir jugadas recientes
-        if seleccion in historial[-20:]:
-            continue
+    # generar combinación
+    combinacion = sorted(random.sample(candidatos[:30], 6))
 
-        if es_valida(seleccion):
-            guardar_historial(seleccion)
-            return seleccion
+    # guardar
+    historial.append(combinacion)
+    with open(DATA_FILE, "w") as f:
+        json.dump(historial, f)
+
+    return combinacion
 
         if intentos > 100:
             # fallback
