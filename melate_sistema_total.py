@@ -37,21 +37,23 @@ def analizar_frecuencia(historial):
 # -------------------------
 # SCORE INTELIGENTE
 # -------------------------
-def score_numero(n, frecuencia):
+def score_numero(n, frecuencia, simulacion):
     freq = frecuencia.get(n, 0)
+    sim = simulacion.get(n, 0)
 
     score = 0
 
-    # penalizar muy repetidos
-    score -= freq * 0.3
+    # penalizar repetidos
+    score -= freq * 0.4
 
-    # bonus zona media
+    # favorecer probabilidad simulada
+    score += sim * 0.05
+
+    # zona media
     if 15 <= n <= 45:
         score += 2
 
-    # evitar extremos
-    if n < 5 or n > 52:
-        score -= 1
+    return score
 
     return score
 
