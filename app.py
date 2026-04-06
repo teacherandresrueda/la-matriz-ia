@@ -53,3 +53,9 @@ if st.button("⚠️ Resetear historial"):
     with open("historial_melate.json", "w") as f:
         f.write("[]")
     st.warning("Historial reiniciado")
+from melate_sistema_total import exportar_excel
+
+if st.button("📥 Exportar a Excel"):
+    historial = leer_historial()
+    exportar_excel(historial)
+    st.success("Archivo generado: melate_resultados.xlsx")
